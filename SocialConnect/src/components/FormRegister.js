@@ -32,40 +32,48 @@ export default class FormRegister extends Component {
         }
 
 
-        auth.createUserWithEmailAndPassword(email, pass)
-            .then(res => {
-                let userData = {
-                    owner: this.state.email,
-                    userName: this.state.userName,
-                    createdAt: Date.now(),
-                    bio: this.state.bio,
-                    fotoPerfil: this.state.fotoPerfil
-                };
+        // auth.createUserWithEmailAndPassword(email, pass)
+        //     .then(res => {
+        //         let userData = {
+        //             owner: this.state.email,
+        //             userName: this.state.userName,
+        //             createdAt: Date.now(),
+        //             bio: this.state.bio,
+        //             fotoPerfil: this.state.fotoPerfil
+        //         };
 
-                if (bio) {
-                    userData.bio = bio;
-                }
+        //         if (bio) {
+        //             userData.bio = bio;
+        //         }
 
-                if (fotoPerfil) {
-                    userData.fotoPerfil = fotoPerfil;
-                }
+        //         if (fotoPerfil) {
+        //             userData.fotoPerfil = fotoPerfil;
+        //         }
 
-                db.collection('users').add(userData)
-                    .then(() => {
-                        console.log("entré")
-                        // Limpia los estados después del registro
-                        this.setState({
-                            email: "",
-                            userName: "",
-                            password: "",
-                            bio: "",
-                            fotoPerfil: "",
-                            error: null
-                        })
-                    })
-                this.props.navigation.navigate('Login');
+        //         db.collection('users').add(userData)
+        //             .then(() => {
+        //                 console.log("entré")
+        //                 // Limpia los estados después del registro
+        //                 this.setState({
+        //                     email: "",
+        //                     userName: "",
+        //                     password: "",
+        //                     bio: "",
+        //                     fotoPerfil: "",
+        //                     error: null
+        //                 })
+        //             })
+        //         this.props.navigation.navigate('Login');
 
-            })
+        //     })
+        auth.createUserWithEmailAndPassword(email, password)
+        .then(user => db.collection('users').add({
+            owner: this.state.email,
+            createdAt: Date.now(),
+            name: this.state.name,
+            minibio: this.state.minibio
+        }))
+        .then((resp) => console.log(resp))
 
             .catch(error => {
                 let errorMessage = "Fallo en el registro";
