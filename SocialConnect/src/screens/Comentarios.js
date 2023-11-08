@@ -9,6 +9,7 @@ export default class Comentarios extends Component {
   render() {
     return (
       <Text> Comentarios</Text>
+      // ACÁ VA EL FORM COMENTARIOS. DEBE MOSTRAR (FLATLIST) LOS COMENTARIOS QUE YA TIENE EL POST y DEBE TENER UN INPUT PARA AGREGAR UN COMENTARIO NUEVO
     )
   }
 }
