@@ -22,14 +22,14 @@ export default class FormRegister extends Component {
     registrarUsuario(email, pass, userName, bio, fotoPerfil) {
 
         if (bio == null) {
-            bio = ""; // Establece un valor predeterminado en blanco si bio es nulo
+            bio = ""; 
         }
 
         if (fotoPerfil == null) {
-            fotoPerfil = ""; // Establece un valor predeterminado en blanco si fotoPerfil es nulo
+            fotoPerfil = ""; 
         }
         if (userName == null) {
-            userName = ""; // Establece un valor predeterminado en blanco si userName es nulo
+            userName = "";
         }
 
 
@@ -148,7 +148,8 @@ export default class FormRegister extends Component {
 
 
                     {
-                        this.state.userName == "" || this.state.email == "" || this.state.password == "" ?
+                        // this.state.userName == "" || this.state.email == "" || this.state.password == "" ?
+                        !(this.state.userName && this.state.email && this.state.password) ? 
                             <TouchableOpacity style={styles.button_deshabilitado} onPress={() => alert("Debe completar los campos")} >
                                 <Text style={styles.buttonText}>Registrarse</Text>
                             </TouchableOpacity> :
