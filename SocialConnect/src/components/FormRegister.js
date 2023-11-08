@@ -20,6 +20,7 @@ export default class FormRegister extends Component {
 
 
     registrarUsuario(email, pass, userName, bio, fotoPerfil) {
+
         if (bio == null) {
             bio = ""; // Establece un valor predeterminado en blanco si bio es nulo
         }
@@ -32,49 +33,50 @@ export default class FormRegister extends Component {
         }
 
 
-        // auth.createUserWithEmailAndPassword(email, pass)
-        //     .then(res => {
-        //         let userData = {
-        //             owner: this.state.email,
-        //             userName: this.state.userName,
-        //             createdAt: Date.now(),
-        //             bio: this.state.bio,
-        //             fotoPerfil: this.state.fotoPerfil
-        //         };
+        auth.createUserWithEmailAndPassword(email, pass)
+            // Actualiza el nombre de usuario. Porque cuando se crea un usuario, el nombre de usuario es nulo
+            .then((user) => {
+                user.user.updateProfile({
+                    displayName: userName
+                })
+            })
+            // Agrega el usuario a la colección de usuarios
+            .then(res => {
+                let userData = {
+                    owner: this.state.email,
+                    userName: this.state.userName,
+                    email: this.state.email,
+                    createdAt: Date.now(),
+                    bio: this.state.bio,
+                    fotoPerfil: this.state.fotoPerfil
+                };
 
-        //         if (bio) {
-        //             userData.bio = bio;
-        //         }
+                if (bio) {
+                    userData.bio = bio;
+                }
 
-        //         if (fotoPerfil) {
-        //             userData.fotoPerfil = fotoPerfil;
-        //         }
+                if (fotoPerfil) {
+                    userData.fotoPerfil = fotoPerfil;
+                }
 
-        //         db.collection('users').add(userData)
-        //             .then(() => {
-        //                 console.log("entré")
-        //                 // Limpia los estados después del registro
-        //                 this.setState({
-        //                     email: "",
-        //                     userName: "",
-        //                     password: "",
-        //                     bio: "",
-        //                     fotoPerfil: "",
-        //                     error: null
-        //                 })
-        //             })
-        //         this.props.navigation.navigate('Login');
-
-        //     })
-        auth.createUserWithEmailAndPassword(email, password)
-        .then(user => db.collection('users').add({
-            owner: this.state.email,
-            createdAt: Date.now(),
-            name: this.state.name,
-            minibio: this.state.minibio
-        }))
-        .then((resp) => console.log(resp))
-
+                db.collection('users').add(userData)
+                    .then(() => {
+                        console.log("entré")
+                        // Limpia los estados después del registro
+                        this.setState({
+                            email: "",
+                            userName: "",
+                            password: "",
+                            bio: "",
+                            fotoPerfil: "",
+                            error: null
+                        })
+                        auth.signOut();
+                    })
+                    .then(() => {
+                        this.props.navigation.navigate('Login');
+                    })
+            })
             .catch(error => {
                 let errorMessage = "Fallo en el registro";
                 if (error.code === "auth/email-already-in-use") {
@@ -83,6 +85,8 @@ export default class FormRegister extends Component {
                     errorMessage = "El correo electrónico no es válido";
                 } else if (error.code === "auth/weak-password") {
                     errorMessage = "La contraseña es demasiado débil";
+                } else if (error.code = "auth/invalid-email") {
+                    errorMessage = "El correo electrónico está mal formateado";
                 }
 
                 this.setState({ error: error.message });
@@ -143,22 +147,23 @@ export default class FormRegister extends Component {
                         null}
 
 
-                    <TouchableOpacity style={styles.button} onPress={() => this.registrarUsuario(this.state.email, this.state.password, this.state.userName, this.state.bio, this.state.fotoPerfil, this.props.navigation)}>
-                        <Text style={styles.buttonText}>Registrarse</Text>
-                    </TouchableOpacity>
+                    {
+                        this.state.userName == "" || this.state.email == "" || this.state.password == "" ?
+                            <TouchableOpacity style={styles.button_deshabilitado} onPress={() => alert("Debe completar los campos")} >
+                                <Text style={styles.buttonText}>Registrarse</Text>
+                            </TouchableOpacity> :
+                            <TouchableOpacity style={styles.button_habilitado} onPress={() => this.registrarUsuario(this.state.email, this.state.password, this.state.userName, this.state.bio, this.state.fotoPerfil, this.props.navigation)}>
+                                <Text style={styles.buttonText}>Registrarse</Text>
+                            </TouchableOpacity>
 
+                    }
                     <TouchableOpacity onPress={() => this.props.navigation.navigate('Login')}>
                         <Text>¿Ya tenes cuenta? Ir al login</Text>
                     </TouchableOpacity>
-
-
                 </View>
             </View>
-
-
         )
     }
-
 }
 
 const styles = StyleSheet.create({
