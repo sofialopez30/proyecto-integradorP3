@@ -57,15 +57,29 @@ class PosteosContainer extends Component {
 
     render() {
         return (
-            <View>
-                <FlatList
-                    data={this.state.arrayPosteos}
-                    renderItem={({ item }) => <Posteo posteo={item} navigation={this.props.navigation} />}
-                    keyExtractor={item => item.id}
-                />
-            </View>
-        )
+          <View style={styles.container}>
+            <FlatList
+              data={this.state.arrayPosteos}
+              renderItem={({ item }) => <Posteo posteo={item} navigation={this.props.navigation} />}
+              keyExtractor={item => item.id}
+              contentContainerStyle={styles.postContainer}
+            />
+          </View>
+        );
+      }
     }
-}
+
+
+    const styles = StyleSheet.create({
+        container: {
+          flex: 1,
+          backgroundColor: '#282c34',
+        },
+        postContainer: {
+          alignItems: 'center',
+          paddingTop: 10, 
+        },
+      
+      });
 
 export default PosteosContainer

@@ -9,3 +9,4 @@ export default class SearchResults extends Component {
     )
   }
 }
+

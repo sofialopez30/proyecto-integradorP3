@@ -1,4 +1,4 @@
-import { Text, View } from 'react-native'
+import { Text, View, StyleSheet } from 'react-native'
 import React, { Component } from 'react'
 import { auth } from '../firebase/config'
 import FormRegister from '../components/FormRegister'
@@ -19,9 +19,17 @@ export default class Register extends Component {
 
   render() {
     return (
-      <View>
+      <View style= {styles.container}>
         <FormRegister navigation={this.props.navigation} />
       </View>
     )
   }
 }
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: '#282c34',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+});

@@ -21,11 +21,11 @@ export default class Login extends Component {
     return (
       <View style={styles.container}>
         <FormLogin navigation={this.props.navigation} />
-        <Text>¿Aún no tienes una cuenta?
+        {/* <Text>¿Aún no tienes una cuenta?
           <TouchableOpacity onPress={() => this.props.navigation.navigate('Register')}>
             Registrate aquí!
           </TouchableOpacity>
-        </Text>
+        </Text> */}
       </View>
     )
   }
@@ -34,6 +34,8 @@ export default class Login extends Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center'
+    backgroundColor: '#282c34',
+    justifyContent: 'center',
+    alignItems: 'center',
   }
 })

@@ -1,14 +1,15 @@
 import React, { Component } from 'react'
-import { Text, View, TouchableOpacity } from 'react-native'
+import { Text, View, TouchableOpacity, StyleSheet } from 'react-native'
 
 import { db } from '../firebase/config'
 
 import FormProfile from '../components/FormProfile'
 
-export default class StackPorfile extends Component {
+export default class StackProfile extends Component {
     constructor(props) {
         super(props)
         this.state = {
+            posts: [],
             userEmail: null
         }
     }
@@ -30,10 +31,10 @@ export default class StackPorfile extends Component {
 
     render() {
         return (
-            <View>
-                <Text> StackPorfile </Text>
+            <View style= {styles.container}>
+                {/* <Text> StackPorfile </Text> */}
                 <TouchableOpacity onPress={() => this.props.navigation.navigate("Home")}>
-                    <Text>&larr;</Text>
+                    <Text style={styles.title} >&larr;</Text>
                 </TouchableOpacity>
                 {
                     this.state.userEmail ?
@@ -44,3 +45,16 @@ export default class StackPorfile extends Component {
         )
     }
 }
+const styles = StyleSheet.create({
+    container: {
+      flex: 1,
+      // justifyContent: 'center',
+      // alignItems: 'center',
+      padding: 20,
+      backgroundColor: '#282c34', 
+    },
+    title: {
+      fontSize: 25,
+      color: '#61dafb',
+     },
+  });

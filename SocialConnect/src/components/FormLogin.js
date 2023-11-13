@@ -8,20 +8,20 @@ export default class FormLogin extends Component {
 
         this.state = {
             email: "",
-            pass: "",
+            password: "",
             error: null
 
         }
     }
 
-    login(email, pass) {
+    login(email, password) {
 
-        if (!email || !pass) {
+        if (!email || !password) {
             this.setState({ error: "Por favor, completa todos los campos obligatorios." });
             return; // Salir de la función si faltan campos
         }
 
-        auth.signInWithEmailAndPassword(email, pass)
+        auth.signInWithEmailAndPassword(email, password)
             .then(response => {
                 console.log("Login OK")
                 this.setState({ login: true });
@@ -45,84 +45,87 @@ export default class FormLogin extends Component {
 
     render() {
         return (
-            <View styles={styles.formContainer}>
-                <Text>Login</Text>
-                <TextInput
-                    style={styles.input}
-                    onChangeText={(text) => this.setState({ email: text })}
-                    placeholder="email"
-                    keyboardType="email-address"
-                    value={this.state.email}
-                />
-
-                <TextInput
-                    style={styles.input}
-                    onChangeText={(text) => this.setState({ password: text })}
-                    placeholder="password"
-                    keyboardType="default"
-                    secureTextEntry={true}
-                    value={this.state.password}
-
-                />
-
-                {/* Mostrar el mensaje de error si existe el error */}
-                {this.state.error ? (
-                    <Text style={styles.errorText}>{this.state.error}</Text>
-                ) :
-                    null}
-
-
-                <TouchableOpacity style={styles.button} onPress={() => this.login(this.state.email, this.state.password)}>
-                    <Text style={styles.buttonText}>Login</Text>
-                </TouchableOpacity>
-
-                <TouchableOpacity onPress={() => this.props.navigation.navigate('Register')}>
-                    <Text>¿No tenes cuenta? Ir al register</Text>
-                </TouchableOpacity>
-
-
-            </View>
-
-
-        )
+          <View style={styles.formContainer}>
+            <Text style={styles.title}>Inicia sesión en SocialConnect</Text>
+            <TextInput
+              style={styles.input}
+              onChangeText={(text) => this.setState({ email: text })}
+              placeholder="Correo electrónico"
+              keyboardType="email-address"
+              value={this.state.email}
+            />
+    
+            <TextInput
+              style={styles.input}
+              onChangeText={(text) => this.setState({ password: text })}
+              placeholder="Contraseña"
+              keyboardType="default"
+              secureTextEntry={true}
+              value={this.state.password}
+            />
+    
+            {this.state.error ? (
+              <Text style={styles.errorText}>{this.state.error}</Text>
+            ) : null}
+    
+            <TouchableOpacity style={styles.button} onPress={() => this.login(this.state.email, this.state.password)}>
+              <Text style={styles.buttonText}>Iniciar sesión</Text>
+            </TouchableOpacity>
+    
+            <TouchableOpacity style={styles.registerLink} onPress={() => this.props.navigation.navigate('Register')}>
+              <Text style={styles.registerLinkText}>¿No tienes cuenta? Regístrate aquí</Text>
+            </TouchableOpacity>
+          </View>
+        );
+      }
     }
-
-}
-
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
-        backgroundColor: '#fff',
-    },
-    title: {
-        fontSize: 24,
+    
+    const styles = StyleSheet.create({
+      formContainer: {
+        width: '80%',
+        backgroundColor: '#282c34',
+        padding: 20,
+        borderRadius: 10,
+        
+      },
+      title: {
+        fontSize: 25,
+        fontWeight: 'bold',
         marginBottom: 20,
-    },
-    input: {
-        width: 300,
-        height: 40,
+        color: '#61dafb',
+      },
+      input: {
         borderWidth: 1,
-        borderColor: '#ccc',
-        marginBottom: 10,
-        paddingLeft: 10,
-    },
-    button: {
-        backgroundColor: "#405DE6",
-        marginHorizontal: 10,
-        paddingHorizontal: 10,
-        paddingVertical: 6,
-        textAlign: "center",
-        borderRadius: 4,
-        borderWidth: 1,
-        borderStyle: "solid",
-        borderColor: "#fff",
-        width: 300,
-        marginTop: 20,
-    },
-    buttonText: {
-        color: '#fff',
+        borderColor: '#61dafb',
+        marginBottom: 20,
+        padding: 10,
+        borderRadius: 5,
+        backgroundColor: 'white',
+        color: '#282c34',
+      },
+      button: {
+        backgroundColor: '#61dafb',
+        padding: 15,
+        borderRadius: 5,
+        alignItems: 'center',
+      },
+      buttonText: {
+        color: 'white',
+        fontWeight: 'bold',
         fontSize: 16,
-    },
-});
+      },
+      errorText: {
+        color: 'red',
+        marginBottom: 10,
+        fontSize: 14,
+      },
+      registerLink: {
+        marginTop: 15,
+        alignItems: 'center',
+      },
+      registerLinkText: {
+        color: '#61dafb',
+        fontSize: 14,
+        fontWeight: 'bold',
+      },
+    });

@@ -49,39 +49,68 @@ class FormProfile extends Component {
             })
         });
     }
+   
+  render() {
+    return (
+      <View style={styles.container}>
+        <Text style={styles.label} > Email: </Text>
+        <Text style={styles.userData}>{this.props.userEmail}</Text>
 
-    render() {
-        return (
-            <View>
-                <Text> FormProfile </Text>
-                <Text>{this.props.userEmail}</Text>
-                {
-                    this.state.userData ?
-                    <View>
-                        <Text>Nombre de ususario: {this.state.userData.userName}</Text>
-                        <Text>Biografía: {this.state.userData.bio}</Text>
-                        <Text>Foto de perfil: {this.state.userData.fotoPerfil}</Text>
-                        <Text>Posteos: {this.state.arrayPosteos.length}</Text>
-                    </View> :
-                    null
-                }
-                {
-                    this.state.arrayPosteos ?
-                    <FlatList
-                        data={this.state.arrayPosteos}
-                        renderItem={({ item }) => 
-                            <View>
-                                <ControlesPosteo posteoId={item.uid} navigation={this.props.navigation} />
-                                <PosteosContainer posteo={item} navigation={this.props.navigation} /> 
-                            </View>
-                        }
-                        keyExtractor={item => item.uid}
-                    /> :
-                    <Text>No hay posteos para mostrar</Text>
-                }
-            </View>
-        )
-    }
+        {this.state.userData ? (
+          <View style={styles.userInfoContainer}>
+            <Text style={styles.label}>Nombre de usuario:</Text>
+            <Text style={styles.userData}>{this.state.userData.userName}</Text>
+            <Text style={styles.label}>Biografía:</Text>
+            <Text style={styles.userData}>{this.state.userData.bio}</Text>
+            <Text style={styles.label}>Foto de perfil:</Text>
+            <Text style={styles.userData}>{this.state.userData.fotoPerfil}</Text>
+            <Text style={styles.label}>Posteos:</Text>
+            <Text style={styles.userData}>{this.state.arrayPosteos.length}</Text>
+          </View>
+        ) : null}
+
+        {this.state.arrayPosteos ? (
+          <FlatList
+            data={this.state.arrayPosteos}
+            renderItem={({ item }) => (
+              <View style={styles.postContainer}>
+                <ControlesPosteo posteoId={item.uid} navigation={this.props.navigation} />
+                <PosteosContainer posteo={item} navigation={this.props.navigation} />
+              </View>
+            )}
+            keyExtractor={(item) => item.uid}
+          />
+        ) : (
+          <Text>No hay posteos para mostrar</Text>
+        )}
+      </View>
+    );
+  }
 }
 
-export default FormProfile
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    padding: 20,
+  },
+  userInfoContainer: {
+    marginBottom: 20,
+  },
+  label: {
+    paddingTop:10,
+    fontSize: 16,
+    fontWeight: 'bold',
+    color: 'white',
+  },
+  userData: {
+    fontSize: 16,
+    marginBottom: 10,
+    fontWeight: '400',
+    color: 'white',
+  },
+  postContainer: {
+    marginBottom: 20,
+  },
+});
+
+export default FormProfile;

@@ -97,20 +97,21 @@ export default class FormRegister extends Component {
 
     render() {
         return (
-            <View>
-                <Text>Registrate a mi App</Text>
-                <View>
+            <View style={styles.container}>
+                <View style={styles.formContainer}>
+                    <Text style={styles.title}>Regístrate en SocialConnect</Text>
+                
                     <TextInput
                         style={styles.input}
                         onChangeText={(text) => this.setState({ userName: text })}
-                        placeholder="user name"
+                        placeholder="Nombre de usuario"
                         keyboardType="default"
                         value={this.state.userName}
                     />
 
                     <TextInput
                         style={styles.input}
-                        placeholder='Pon tu email'
+                        placeholder='Correo electrónico'
                         keyboardType='email-adress'
                         value={this.state.email}
                         onChangeText={(text) => this.setState({ email: text })}
@@ -118,16 +119,17 @@ export default class FormRegister extends Component {
 
                     <TextInput
                         style={styles.input}
-                        placeholder='Pon tu password'
+                        placeholder='Contraseña'
                         keyboardType='default'
                         value={this.state.password}
                         secureTextEntry={true}
                         onChangeText={(text) => this.setState({ password: text })}
                     />
+
                     <TextInput
                         style={styles.input}
                         onChangeText={(text) => this.setState({ bio: text })}
-                        placeholder="mini bio"
+                        placeholder="Mini biografía"
                         keyboardType="default"
                         value={this.state.bio}
                     />
@@ -140,26 +142,22 @@ export default class FormRegister extends Component {
                         value={this.state.fotoPerfil}
                     />
 
-                    {/* Mostrar el mensaje de error si existe el error */}
                     {this.state.error ? (
                         <Text style={styles.errorText}>{this.state.error}</Text>
-                    ) :
-                        null}
+                    ) : null}
 
+                    {!this.state.userName || !this.state.email || !this.state.password ? (
+                        <TouchableOpacity style={styles.buttonDisabled} onPress={() => alert("Debe completar los campos")}>
+                            <Text style={styles.buttonText}>Registrarse</Text>
+                        </TouchableOpacity>
+                    ) : (
+                        <TouchableOpacity style={styles.buttonEnabled} onPress={() => this.registrarUsuario(this.state.email, this.state.password, this.state.userName, this.state.bio, this.state.fotoPerfil, this.props.navigation)}>
+                            <Text style={styles.buttonText}>Registrarse</Text>
+                        </TouchableOpacity>
+                    )}
 
-                    {
-                        // this.state.userName == "" || this.state.email == "" || this.state.password == "" ?
-                        !(this.state.userName && this.state.email && this.state.password) ? 
-                            <TouchableOpacity style={styles.button_deshabilitado} onPress={() => alert("Debe completar los campos")} >
-                                <Text style={styles.buttonText}>Registrarse</Text>
-                            </TouchableOpacity> :
-                            <TouchableOpacity style={styles.button_habilitado} onPress={() => this.registrarUsuario(this.state.email, this.state.password, this.state.userName, this.state.bio, this.state.fotoPerfil, this.props.navigation)}>
-                                <Text style={styles.buttonText}>Registrarse</Text>
-                            </TouchableOpacity>
-
-                    }
-                    <TouchableOpacity onPress={() => this.props.navigation.navigate('Login')}>
-                        <Text>¿Ya tenes cuenta? Ir al login</Text>
+                    <TouchableOpacity style= {styles.loginLink} onPress={() => this.props.navigation.navigate('Login')}>
+                        <Text style= {styles.loginLink}>¿Ya tienes cuenta? Ir al login</Text>
                     </TouchableOpacity>
                 </View>
             </View>
@@ -168,17 +166,65 @@ export default class FormRegister extends Component {
 }
 
 const styles = StyleSheet.create({
+    container: {
+        flex: 1,
+        width: '100%',
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: '#282c34', 
+        padding: 20, 
+     
+    },
+    formContainer: {
+        flex: 1,
+        width: '100%',
+        backgroundColor: '#282c34',
+        padding: 20,
+    },
+    title: {
+        fontSize: 25,
+        fontWeight: 'bold',
+        marginBottom: 20,
+        marginTop: 40,
+        color: '#61dafb',
+       
+    },
     input: {
         borderWidth: 1,
-        borderColor: 'green',
-        marginBottom: 24
-
+        borderColor: '#61dafb',
+        marginBottom: 20,
+        padding: 10,
+        borderRadius: 5,
+        backgroundColor: 'white',
+        color: '#282c34',
     },
-    btn: {
-        backgroundColor: 'purple',
-        padding: 16
+    buttonEnabled: {
+        backgroundColor: '#61dafb',
+        padding: 15,
+        borderRadius: 5,
+        alignItems: 'center',
     },
-    textBn: {
-        color: 'white'
-    }
-})
+    buttonDisabled: {
+        backgroundColor: '#7f848e',
+        padding: 15,
+        borderRadius: 5,
+        alignItems: 'center',
+    },
+    buttonText: {
+        color: 'white',
+        fontWeight: 'bold',
+        fontSize: 16,
+    },
+    errorText: {
+        color: 'red',
+        marginBottom: 10,
+        fontSize: 14,
+    },
+    loginLink: {
+        color: '#61dafb',
+        textAlign: 'center',
+        marginTop: 15,
+        fontSize: 14,
+        fontWeight: 'bold'
+    },
+});
