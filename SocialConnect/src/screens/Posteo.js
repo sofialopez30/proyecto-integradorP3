@@ -108,7 +108,3 @@ const styles = StyleSheet.create({
     fontSize: 16,
   },
 });
-
-
-// ACÁ VA EL FORM POSTEO
-// userEmail = userEmail , userName = displayName, image, description, arrayLikes = [], arrayComentarios = []

@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
 import { Text, View, TouchableOpacity, StyleSheet, FlatList } from 'react-native';
 
-import { db } from '../firebase/config'
+import { auth, db } from '../firebase/config'
 
-import Posteo from "./Posteo"
+import Posteo from "./Posteo";
+import ControlesPosteo from './ControlesPosteo';
 
 class PosteosContainer extends Component {
     constructor(props) {
@@ -19,15 +20,13 @@ class PosteosContainer extends Component {
         } else {
             this.getPosteos()
         }
-        console.log(this.props);
-        console.log(this.props.navigation);
     }
 
     getPosteosByEmail(userEmail) {
         db.collection("posts").onSnapshot((querySnapshot) => {
             const arrayPosteos = []
             querySnapshot.forEach((doc) => {
-                if (doc.data().userEmail == userEmail) {
+                if (doc.data().owner == userEmail) {
                     arrayPosteos.push({
                         data: doc.data(),
                         uid: doc.id
@@ -59,43 +58,47 @@ class PosteosContainer extends Component {
 
     render() {
         return (
-          <View style={styles.container}>
-            {
-                this.props.userEmail ?
-                <FlatList
-                  data={this.state.arrayPosteos}
-                  renderItem={({ item }) => {
-                    <View>
-                        <ControlesPosteo posteoId={item.uid} navigation={this.props.navigation} />
-                        <Posteo posteo={item} navigation={this.props.navigation} />
-                    </View>
-                  }}
-                  keyExtractor={item => item.id}
-                  contentContainerStyle={styles.postContainer}
-                /> :
-                <FlatList
-                  data={this.state.arrayPosteos}
-                  renderItem={({ item }) => <Posteo posteo={item} navigation={this.props.navigation} />}
-                  keyExtractor={item => item.id}
-                  contentContainerStyle={styles.postContainer}
-                />
-            }
-          </View>
+            <View style={styles.container}>
+                {
+                    this.state.arrayPosteos ?
+                        this.state.arrayPosteos.length > 0 ?
+                            this.props.userEmail === auth.currentUser.email ?
+                                <FlatList
+                                    data={this.state.arrayPosteos}
+                                    renderItem={({ item }) => {
+                                        <React.Fragment>
+                                            <ControlesPosteo posteoId={item.uid} navigation={this.props.navigation} />
+                                            <Posteo posteo={item} navigation={this.props.navigation} />
+                                        </React.Fragment>
+                                    }}
+                                    keyExtractor={item => item.createdAt?.toString()}
+                                    contentContainerStyle={styles.postContainer}
+                                /> :
+                                <FlatList
+                                    data={this.state.arrayPosteos}
+                                    renderItem={({ item }) => <Posteo posteo={item} navigation={this.props.navigation} />}
+                                    keyExtractor={item => item.createdAt?.toString()}
+                                    contentContainerStyle={styles.postContainer}
+                                /> :
+                            <Text>No hay posteos</Text> :
+                        <Text>No hay posteos</Text>
+                }
+            </View>
         );
-      }
     }
+}
 
 
-    const styles = StyleSheet.create({
-        container: {
-          flex: 1,
-          backgroundColor: '#282c34',
-        },
-        postContainer: {
-          alignItems: 'center',
-          paddingTop: 10, 
-        },
-      
-      });
+const styles = StyleSheet.create({
+    container: {
+        flex: 1,
+        backgroundColor: '#282c34',
+    },
+    postContainer: {
+        alignItems: 'center',
+        paddingTop: 10,
+    },
+
+});
 
 export default PosteosContainer

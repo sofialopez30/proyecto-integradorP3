@@ -27,7 +27,8 @@ export default class Posteo extends Component {
       .doc(postId)
       .onSnapshot((doc) => {
         const data = doc.data();
-        const cantidadComentarios = data.comentarios ? data.comentarios.length : 0;
+        // const cantidadComentarios = data.comentarios ? data.comentarios.length : 0;
+        const cantidadComentarios = data && data.comentarios ? data.comentarios.length : 0;
         this.setState({
           comentario: cantidadComentarios,
         });
@@ -35,14 +36,24 @@ export default class Posteo extends Component {
   }
 
 
+  // getLikes(postId) {
+  //   db.collection("posts").onSnapshot((querySnapshot) => {
+  //     let likes;
+  //     querySnapshot.forEach((doc) => {
+  //       if (doc.id == postId) {
+  //         likes = doc.data().arrayLikes || [];
+  //       }
+  //     });
+  //     this.setState({
+  //       arrayLikes: likes,
+  //       liked: likes.includes(auth.currentUser.email),
+  //     });
+  //   });
+  // }
+
   getLikes(postId) {
-    db.collection("posts").onSnapshot((querySnapshot) => {
-      let likes;
-      querySnapshot.forEach((doc) => {
-        if (doc.id == postId) {
-          likes = doc.data().arrayLikes || [];
-        }
-      });
+    db.collection("posts").doc(postId).get().then((doc) => {
+      const likes = doc.exists ? doc.data().arrayLikes || [] : [];
       this.setState({
         arrayLikes: likes,
         liked: likes.includes(auth.currentUser.email),

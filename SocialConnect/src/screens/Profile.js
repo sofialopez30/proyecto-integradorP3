@@ -4,19 +4,14 @@ import {Text, View, TouchableOpacity, StyleSheet} from 'react-native'
 import { auth } from '../firebase/config'
 
 import FormProfile from '../components/FormProfile'
-// import CambiarContrasena from '../components/CambiarContrasena'
 
 export default class Profile extends Component {
   constructor(props) {
     super(props)
-    this.state={
-      arrayPosteo:[],
-      user:[]
-    }
   }
 
   componentDidMount(){
-    console.log(auth.currentUser);
+    console.log(auth.currentUser.email);
   }
 
   logOut() {
@@ -36,8 +31,6 @@ export default class Profile extends Component {
         <TouchableOpacity style={styles.logoutButton} onPress={() => this.logOut()}>
           <Text style={styles.logoutButtonText}>Logout</Text>
         </TouchableOpacity>
-
-        {/* <CambiarContrasena /> */}
       </View>
     );
   }

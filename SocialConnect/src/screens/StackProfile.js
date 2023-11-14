@@ -15,12 +15,9 @@ export default class StackProfile extends Component {
     }
 
     componentDidMount() {
-        console.log(this.props.route.params.userName);
-        
         db.collection("users").onSnapshot((querySnapshot) => {
             querySnapshot.forEach((doc) => {
                 if (doc.data().userName == this.props.route.params.userName) {
-                    console.log("YES");
                     this.setState({
                         userEmail: doc.data().owner
                     })
@@ -38,7 +35,7 @@ export default class StackProfile extends Component {
                 </TouchableOpacity>
                 {
                     this.state.userEmail ?
-                    <FormProfile userEmail={this.state.userEmail}/> :
+                    <FormProfile userEmail={this.state.userEmail} navigation={this.props.navigation} /> :
                     null
                 }
             </View>
