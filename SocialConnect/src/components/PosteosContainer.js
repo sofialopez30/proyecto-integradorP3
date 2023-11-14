@@ -34,6 +34,7 @@ class PosteosContainer extends Component {
                     })
                 }
             });
+            arrayPosteos.sort((a, b) => b.data.createdAt - a.data.createdAt);
             this.setState({
                 arrayPosteos: arrayPosteos
             })
@@ -49,6 +50,7 @@ class PosteosContainer extends Component {
                     data: doc.data()
                 })
             });
+            arrayPosteos.sort((a, b) => b.data.createdAt - a.data.createdAt);
             this.setState({
                 arrayPosteos: arrayPosteos
             })
@@ -58,12 +60,26 @@ class PosteosContainer extends Component {
     render() {
         return (
           <View style={styles.container}>
-            <FlatList
-              data={this.state.arrayPosteos}
-              renderItem={({ item }) => <Posteo posteo={item} navigation={this.props.navigation} />}
-              keyExtractor={item => item.id}
-              contentContainerStyle={styles.postContainer}
-            />
+            {
+                this.props.userEmail ?
+                <FlatList
+                  data={this.state.arrayPosteos}
+                  renderItem={({ item }) => {
+                    <View>
+                        <ControlesPosteo posteoId={item.uid} navigation={this.props.navigation} />
+                        <Posteo posteo={item} navigation={this.props.navigation} />
+                    </View>
+                  }}
+                  keyExtractor={item => item.id}
+                  contentContainerStyle={styles.postContainer}
+                /> :
+                <FlatList
+                  data={this.state.arrayPosteos}
+                  renderItem={({ item }) => <Posteo posteo={item} navigation={this.props.navigation} />}
+                  keyExtractor={item => item.id}
+                  contentContainerStyle={styles.postContainer}
+                />
+            }
           </View>
         );
       }

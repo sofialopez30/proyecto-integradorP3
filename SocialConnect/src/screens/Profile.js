@@ -8,6 +8,10 @@ import FormProfile from '../components/FormProfile'
 export default class Profile extends Component {
   constructor(props) {
     super(props)
+    this.state={
+      arrayPosteo:[],
+      user:[]
+    }
   }
 
   componentDidMount(){

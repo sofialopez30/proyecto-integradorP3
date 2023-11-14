@@ -29,7 +29,7 @@ export default class Comentarios extends Component {
 
             {this.state.dataPost && this.state.dataPost.comentarios ? (
                 <FlatList
-                    data={this.state.dataPost.comentarios}
+                    data={this.state.dataPost.comentarios.reverse()}
                     keyExtractor={(item) => item.createdAt.toString()}
                     renderItem={({ item }) => (
                         <View style={styles.commentContainer}>
@@ -39,7 +39,7 @@ export default class Comentarios extends Component {
                     )}
                 />
             ) : (
-                <Text>Loading comments...</Text>
+                <Text style= {styles.sincommentText}>Aún no hay comentarios, se el primero!!</Text>
             )}
 
         <FormComentarios postId={this.props.route.params.postId} />
@@ -52,11 +52,13 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 20,
+    backgroundColor: '#282c34',
   },
   title: {
     fontSize: 24,
     fontWeight: 'bold',
     marginBottom: 20,
+    color: '#61dafb',
   },
   commentContainer: {
     marginBottom: 16,
@@ -64,8 +66,16 @@ const styles = StyleSheet.create({
   commentOwner: {
     fontSize: 16,
     fontWeight: 'bold',
+    color: 'white'
   },
   commentText: {
     fontSize: 16,
+    color:'white'
+  },
+  sincommentText: {
+    textAlign: 'center',
+    marginTop: 20,
+    fontSize: 20,
+    color: 'white',
   },
 });

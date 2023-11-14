@@ -29,22 +29,6 @@ export default class FormPosteo extends Component {
         .catch(err => console.log(err))
     }
 
-    // aceptarFoto(){
-    //     fetch(this.state.urlTemp)
-    //     .then(resp => resp.blob())
-    //     .then(img => {
-    //         const ref = storage.ref(`fotos/${Date.now()}.jpg`)
-    //         ref.put(img)
-    //         .then(resp =>{
-    //             ref.getDownloadURL()
-    //             .then((url)=> this.props.actualizarFotourl(url))
-    //         })
-    //         .catch(err => console.log(err))
-    //     })
-    //     .catch(err=> console.log(err))
-
-    // }
-
     aceptarFoto() {
         fetch(this.state.urlTemp)
             .then(resp => resp.blob())
@@ -60,7 +44,7 @@ export default class FormPosteo extends Component {
                                 // Actualiza la cantidad de posteos del usuario
                                 const userRef = db.collection("users").doc(auth.currentUser.uid);
                                 userRef.update({
-                                    cantidadPosteos: firebase.firestore.FieldValue.increment(1),
+                                    arrayPosteos: firebase.firestore.FieldValue.increment(1),
                                 });
                             })
                             .catch((err) => console.log(err));

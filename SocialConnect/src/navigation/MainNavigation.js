@@ -10,42 +10,16 @@ import Login from '../screens/Login';
 import TabNavigation from './TabNavigation';
 import StackProfile from '../screens/StackProfile';
 import Comentarios from '../screens/Comentarios';
-import Cargando from '../screens/Cargando';
+
 
 
 const Stack = createNativeStackNavigator();
 
 export default class MainNavigation extends Component{
-    constructor(props) {
-        super(props);
-        this.state = {
-            Cargando: true,
-        };
-    }
-
-    componentDidMount() {
-        auth.onAuthStateChanged((user) => {
-            if (user) {
-                this.setState({
-                    isLoading: false,
-                });
-            } 
-        });
-    }
-
     render(){
         return(
             <NavigationContainer>
                 <Stack.Navigator>
-                {
-                        this.state.isLoading ?
-                            <Stack.Screen
-                                name="Loading"
-                                component={ Loading }
-                                options={{ headerShown: false }}
-                            /> :
-                            null
-                    }
                     <Stack.Screen
                         name='Register'
                         component={Register}

@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import { db, auth } from '../firebase/config';
-import { TextInput, View, Text, TouchableOpacity, StyleSheet } from 'react-native'
+import { TextInput, View, Text, TouchableOpacity, StyleSheet, ActivityIndicator } from 'react-native'
+
 
 
 export default class FormRegister extends Component {
@@ -13,10 +14,21 @@ export default class FormRegister extends Component {
             password: "",
             bio: "",
             fotoPerfil: "",
-            error: null
+            error: null,
+            loading: true,
 
         }
     }
+
+    componentDidMount() {
+        auth.onAuthStateChanged((user) => {
+          if (user) {
+            this.props.navigation.navigate('Register');
+          } else {
+            this.setState({ loading: false });
+          }
+        });
+      }
 
 
     registrarUsuario(email, pass, userName, bio, fotoPerfil) {
@@ -96,6 +108,15 @@ export default class FormRegister extends Component {
     }
 
     render() {
+        if (this.state.loading) {
+            return (
+              <View style={styles.loaderContainer}>
+                <ActivityIndicator size="large" color="white" />
+                <Text style={styles.title}>Cargando...</Text>
+              </View>
+            );
+          }
+      
         return (
             <View style={styles.container}>
                 <View style={styles.formContainer}>
