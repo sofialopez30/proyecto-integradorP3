@@ -4,20 +4,21 @@ import { Text, View, TouchableOpacity, StyleSheet, FlatList } from 'react-native
 import { db } from '../firebase/config'
 
 import PosteosContainer from './PosteosContainer';
+import ControlesPosteo from './ControlesPosteo';
 
 class FormProfile extends Component {
     constructor(props) {
         super(props)
         this.state = {
-          cantidadPosteos: 0,
-          userData: null
+            arrayPosteos: [],
+            userData: null
         }
     }
 
     componentDidMount() {
-        // console.log(this.props.userEmail)
+        console.log(this.props.userEmail)
         this.getUserData(this.props.userEmail)
-        // this.getPosteos(this.props.userEmail)
+        this.getPosteos(this.props.userEmail)
     }
     
     getUserData(userEmail) {
@@ -34,14 +35,17 @@ class FormProfile extends Component {
 
     getPosteos(userEmail) {
         db.collection("posts").onSnapshot((querySnapshot) => {
-            let cantidadPosteos = 0
+            const arrayPosteos = []
             querySnapshot.forEach((doc) => {
                 if (doc.data().userEmail == userEmail) {
-                    cantidadPosteos++
+                    arrayPosteos.push({
+                        data: doc.data(),
+                        uid: doc.id
+                    })
                 }
-            })
+            });
             this.setState({
-                cantidadPosteos: cantidadPosteos
+                arrayPosteos: arrayPosteos
             })
         });
     }
@@ -60,26 +64,30 @@ class FormProfile extends Component {
             <Text style={styles.userData}>{this.state.userData.bio}</Text>
             <Text style={styles.label}>Foto de perfil:</Text>
             <Text style={styles.userData}>{this.state.userData.fotoPerfil}</Text>
+            <Text style={styles.label}>Posteos:</Text>
+            <Text style={styles.userData}>{this.state.arrayPosteos.length}</Text>
           </View>
         ) : null}
 
-        {
-          this.state.cantidadPosteos > 0 ?
-          <View style={styles.userInfoContainer}>
-            <Text style={styles.label}>Posteos:</Text>
-            <Text style={styles.userData}>{this.state.cantidadPosteos}</Text>
-          </View> :
-          <View style={styles.userInfoContainer}>
-            <Text style={styles.label}>Posteos:</Text>
-            <Text style={styles.userData}>0</Text>
-          </View> 
-        }
-
-        <PosteosContainer userEmail={this.props.userEmail} navigation={this.props.navigation} />
+        {this.state.arrayPosteos ? (
+          <FlatList
+            data={this.state.arrayPosteos}
+            renderItem={({ item }) => (
+              <View style={styles.postContainer}>
+                <ControlesPosteo posteoId={item.uid} navigation={this.props.navigation} />
+                <PosteosContainer posteo={item} navigation={this.props.navigation} />
+              </View>
+            )}
+            keyExtractor={(item) => item.uid}
+          />
+        ) : (
+          <Text>No hay posteos para mostrar</Text>
+        )}
       </View>
     );
   }
 }
+
 
 const styles = StyleSheet.create({
   container: {
