@@ -24,7 +24,8 @@ export default class Profile extends Component {
   render() {
     return (
       <View style={styles.container}>
-        <Text style={styles.title}>Profile</Text>
+        
+        <Text style={styles.title}>Tu Perfil</Text>
         
         <FormProfile userEmail={auth.currentUser.email} navigation={this.props.navigation} />
         

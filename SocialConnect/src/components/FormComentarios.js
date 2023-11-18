@@ -11,7 +11,7 @@ export default class FormComentarios extends Component {
         }
     }
 
-    enviarComentario(comentario){
+    comentar(comentario){
         db
         .collection('posts')
         .doc(this.props.postId)
@@ -21,7 +21,8 @@ export default class FormComentarios extends Component {
             createdAt: Date.now(),
             comentario: comentario
           })
-        })
+        }),
+        this.setState({ comentario: '' });
       }
       
       render() {
@@ -42,7 +43,7 @@ export default class FormComentarios extends Component {
                   <Text style={styles.buttonText}>Enviar</Text>
                 </TouchableOpacity>
               ) : (
-                <TouchableOpacity style={[styles.button, styles.buttonEnabled]} onPress={() => this.enviarComentario(this.state.comentario)}>
+                <TouchableOpacity style={[styles.button, styles.buttonEnabled]} onPress={() => this.comentar(this.state.comentario)}>
                   <Text style={styles.buttonText}>Enviar</Text>
                 </TouchableOpacity>
               )}

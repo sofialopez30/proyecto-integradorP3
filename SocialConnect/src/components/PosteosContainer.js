@@ -63,25 +63,27 @@ class PosteosContainer extends Component {
                     this.state.arrayPosteos ?
                         this.state.arrayPosteos.length > 0 ?
                             this.props.userEmail === auth.currentUser.email ?
-                                <FlatList
-                                    data={this.state.arrayPosteos}
-                                    renderItem={({ item }) => {
-                                        <React.Fragment>
-                                            <ControlesPosteo posteoId={item.uid} navigation={this.props.navigation} />
-                                            <Posteo posteo={item} navigation={this.props.navigation} />
-                                        </React.Fragment>
-                                    }}
-                                    keyExtractor={item => item.createdAt?.toString()}
-                                    contentContainerStyle={styles.postContainer}
-                                /> :
+                            <FlatList
+                            data={this.state.arrayPosteos}
+                            renderItem={({ item }) => (
+                                (
+                                    <>
+                                        <ControlesPosteo posteoId={item.uid} navigation={this.props.navigation} />
+                                        <Posteo posteo={item}  navigation={this.props.navigation} />
+                                    </>
+                                )
+                            )}
+                            keyExtractor={item => item.uid}
+                            contentContainerStyle={styles.postContainer}
+                        /> :
                                 <FlatList
                                     data={this.state.arrayPosteos}
                                     renderItem={({ item }) => <Posteo posteo={item} navigation={this.props.navigation} />}
-                                    keyExtractor={item => item.createdAt?.toString()}
                                     contentContainerStyle={styles.postContainer}
-                                /> :
-                            <Text>No hay posteos</Text> :
-                        <Text>No hay posteos</Text>
+                                    
+                                    /> :
+                            <Text style={styles.title}>No hay posteos </Text> :
+                        <Text style={styles.title}>No hay posteos</Text>
                 }
             </View>
         );
@@ -98,6 +100,14 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         paddingTop: 10,
     },
+    title: {
+        fontSize: 25,
+        fontWeight: 'bold',
+        marginBottom: 20,
+        marginTop: 40,
+        marginLeft: 20, 
+        color: '#61dafb',
+       },
 
 });
 

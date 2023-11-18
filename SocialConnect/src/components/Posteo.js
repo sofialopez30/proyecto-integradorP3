@@ -35,22 +35,6 @@ export default class Posteo extends Component {
       });
   }
 
-
-  // getLikes(postId) {
-  //   db.collection("posts").onSnapshot((querySnapshot) => {
-  //     let likes;
-  //     querySnapshot.forEach((doc) => {
-  //       if (doc.id == postId) {
-  //         likes = doc.data().arrayLikes || [];
-  //       }
-  //     });
-  //     this.setState({
-  //       arrayLikes: likes,
-  //       liked: likes.includes(auth.currentUser.email),
-  //     });
-  //   });
-  // }
-
   getLikes(postId) {
     db.collection("posts").doc(postId).get().then((doc) => {
       const likes = doc.exists ? doc.data().arrayLikes || [] : [];
@@ -91,6 +75,7 @@ export default class Posteo extends Component {
 
   render() {
     const comentario = this.state.comentario;
+    const image = this.props.image;
     return (
       <View style={styles.postContainer}>
         <TouchableOpacity

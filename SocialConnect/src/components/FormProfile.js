@@ -1,71 +1,77 @@
 import React, { Component } from 'react';
-import { Text, View, TouchableOpacity, StyleSheet, FlatList } from 'react-native';
+import { Text, View, TouchableOpacity, StyleSheet, FlatList, Image, ScrollView } from 'react-native';
 
 import { db } from '../firebase/config'
 
 import PosteosContainer from './PosteosContainer';
 
 class FormProfile extends Component {
-    constructor(props) {
-        super(props)
-        this.state = {
-          cantidadPosteos: 0,
-          userData: null
+  constructor(props) {
+    super(props)
+    this.state = {
+      cantidadPosteos: 0,
+      userData: null
+    }
+  }
+
+  componentDidMount() {
+    this.getUserData(this.props.userEmail)
+    this.getPosteos(this.props.userEmail)
+  }
+
+  getUserData(userEmail) {
+    db.collection("users").onSnapshot((querySnapshot) => {
+      querySnapshot.forEach((doc) => {
+        if (doc.data().owner == userEmail) {
+          this.setState({
+            userData: doc.data()
+          })
         }
-    }
+      });
+    });
+  }
 
-    componentDidMount() {
-        this.getUserData(this.props.userEmail)
-        this.getPosteos(this.props.userEmail)
-    }
-    
-    getUserData(userEmail) {
-        db.collection("users").onSnapshot((querySnapshot) => {
-            querySnapshot.forEach((doc) => {
-                if (doc.data().owner == userEmail) {
-                    this.setState({
-                        userData: doc.data()
-                    })
-                }
-            });
-        });
-    }
+  getPosteos(userEmail) {
+    db.collection("posts").onSnapshot((querySnapshot) => {
+      let cantidadPosteos = 0
+      querySnapshot.forEach((doc) => {
+        if (doc.data().owner == userEmail) {
+          cantidadPosteos++
+        }
+      });
+      this.setState({
+        cantidadPosteos: cantidadPosteos
+      })
+    });
+  }
 
-    getPosteos(userEmail) {
-        db.collection("posts").onSnapshot((querySnapshot) => {
-            let cantidadPosteos = 0
-            querySnapshot.forEach((doc) => {
-                if (doc.data().owner == userEmail) {
-                  cantidadPosteos++
-                }
-            });
-            this.setState({
-                cantidadPosteos: cantidadPosteos
-            })
-        });
-    }
-   
   render() {
     return (
-      <View style={styles.container}>
-        <Text style={styles.label} > Email: </Text>
-        <Text style={styles.userData}>{this.props.userEmail}</Text>
+      <ScrollView contentContainerStyle={styles.scrollViewContainer}>
 
-        {this.state.userData ? (
-          <View style={styles.userInfoContainer}>
-            <Text style={styles.label}>Nombre de usuario:</Text>
-            <Text style={styles.userData}>{this.state.userData.userName}</Text>
-            <Text style={styles.label}>Biografía:</Text>
-            <Text style={styles.userData}>{this.state.userData.bio}</Text>
-            <Text style={styles.label}>Foto de perfil:</Text>
-            <Text style={styles.userData}>{this.state.userData.fotoPerfil}</Text>
-            <Text style={styles.label}>Posteos:</Text>
-            <Text style={styles.userData}>{this.state.cantidadPosteos}</Text>
-          </View>
-        ) : null}
+        <View style={styles.container}>
 
-        <PosteosContainer userEmail={this.props.userEmail} navigation={this.props.navigation} />
-      </View>
+          {this.state.userData ? (
+            <View style={styles.userInfoContainer}>
+              {/* <Image
+                style={styles.img}
+                source={{ uri: this.state.userData.fotoPerfil }}
+
+              /> */}
+              <Text style={styles.label} > Email: </Text>
+              <Text style={styles.userData}>{this.props.userEmail}</Text>
+              <Text style={styles.label}>Nombre de usuario:</Text>
+              <Text style={styles.userData}>{this.state.userData.userName}</Text>
+              <Text style={styles.label}>Biografía:</Text>
+              <Text style={styles.userData}>{this.state.userData.bio}</Text>
+              <Text style={styles.label}>Posteos:</Text>
+              <Text style={styles.userData}>{this.state.cantidadPosteos}</Text>
+            </View>
+          ) : null}
+
+          <PosteosContainer userEmail={this.props.userEmail} navigation={this.props.navigation} />
+        </View>
+      </ScrollView>
     );
   }
 }
@@ -77,9 +83,10 @@ const styles = StyleSheet.create({
   },
   userInfoContainer: {
     marginBottom: 20,
+    alignItems: 'center',
   },
   label: {
-    paddingTop:10,
+    paddingTop: 10,
     fontSize: 16,
     fontWeight: 'bold',
     color: 'white',
@@ -92,6 +99,12 @@ const styles = StyleSheet.create({
   },
   postContainer: {
     marginBottom: 20,
+  },
+  img: {
+    width: 120,
+    height: 120,
+    borderRadius: 60,
+    marginBottom: 10,
   },
 });
 
