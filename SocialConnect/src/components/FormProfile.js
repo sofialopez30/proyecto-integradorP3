@@ -53,11 +53,11 @@ class FormProfile extends Component {
 
           {this.state.userData ? (
             <View style={styles.userInfoContainer}>
-              {/* <Image
+              <Image
                 style={styles.img}
                 source={{ uri: this.state.userData.fotoPerfil }}
 
-              /> */}
+              />
               <Text style={styles.label} > Email: </Text>
               <Text style={styles.userData}>{this.props.userEmail}</Text>
               <Text style={styles.label}>Nombre de usuario:</Text>
