@@ -33,7 +33,7 @@ class PosteosContainer extends Component {
                     })
                 }
             });
-            arrayPosteos.sort((a, b) => b.data.createdAt - a.data.createdAt);
+            arrayPosteos.sort((a, b) => b.data.createdAt - a.data.createdAt);   //cambio de fecha desc a asc
             this.setState({
                 arrayPosteos: arrayPosteos
             })
@@ -63,6 +63,7 @@ class PosteosContainer extends Component {
                     this.state.arrayPosteos ?
                         this.state.arrayPosteos.length > 0 ?
                             this.props.userEmail === auth.currentUser.email ?
+                            
                             <FlatList
                             data={this.state.arrayPosteos}
                             renderItem={({ item }) => (

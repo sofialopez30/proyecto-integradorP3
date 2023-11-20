@@ -40,8 +40,17 @@ export default class FormRegister extends Component {
         if (fotoPerfil == null) {
             fotoPerfil = ""; 
         }
-        if (userName == null) {
-            userName = "";
+        if (userName == '') {
+            return this.setState({error: 'debe ingresar un user name'})
+            
+        }
+        if (email == '') {
+            return this.setState({error: 'debe ingresar un email valido'})
+            
+        }
+        if (pass == '') {
+            return this.setState({error: 'debe ingresar una contrasena'})
+            
         }
 
 
@@ -73,7 +82,7 @@ export default class FormRegister extends Component {
 
                 db.collection('users').add(userData)
                     .then(() => {
-                        console.log("entré")
+                        console.log("entre bien")
                         // Limpia los estados después del registro
                         this.setState({
                             email: "",
@@ -90,18 +99,6 @@ export default class FormRegister extends Component {
                     })
             })
             .catch(error => {
-                let errorMessage = "Fallo en el registro";
-                if (error.code === "auth/email-already-in-use") {
-                    errorMessage = "El correo electrónico ya está en uso";
-                } else if (error.code === "auth/invalid-email") {
-                    errorMessage = "El correo electrónico no es válido";
-                } else if (error.code === "auth/weak-password") {
-                    errorMessage = "La contraseña es demasiado débil";
-                } else if (error.code = "auth/invalid-email") {
-                    errorMessage = "El correo electrónico está mal formateado";
-                }
-
-                this.setState({ error: error.message });
                 console.log(error);
             });
 

@@ -12,10 +12,7 @@ export default class FormComentarios extends Component {
     }
 
     comentar(comentario){
-        db
-        .collection('posts')
-        .doc(this.props.postId)
-        .update({
+        db.collection('posts').doc(this.props.postId).update({
           comentarios: firebase.firestore.FieldValue.arrayUnion({
             owner: auth.currentUser.email,
             createdAt: Date.now(),
@@ -28,8 +25,9 @@ export default class FormComentarios extends Component {
       render() {
         return (
           <View style={styles.container}>
+
             <TextInput
-              placeholder='Agrega tu comentario'
+              placeholder='Agrega un comentario'
               keyboardType='default'
               onChangeText={(text) => this.setState({comentario: text})}
               value={this.state.comentario}
@@ -37,8 +35,10 @@ export default class FormComentarios extends Component {
               numberOfLines={4}
               style={styles.input}
             />
+
             <View style={styles.buttonContainer}>
-              {!this.state.comentario.trim() ? (
+
+              {!this.state.comentario ? (
                 <TouchableOpacity style={[styles.button, styles.buttonDisabled]} onPress={() => alert("Debe escribir un comentario")}>
                   <Text style={styles.buttonText}>Enviar</Text>
                 </TouchableOpacity>

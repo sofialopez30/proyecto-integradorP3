@@ -34,12 +34,15 @@ class ControlesPosteo extends Component {
                     {
                         this.state.deseaEliminar ?
                             <View>
+
                                 <TouchableOpacity onPress={() => this.eliminarPosteo(this.props.posteoId)}>
                                     <Text style={styles.title}>Confirmar</Text>
                                 </TouchableOpacity>
+
                                 <TouchableOpacity onPress={() => this.setState({ deseaEliminar: false })}>
                                     <Text style={styles.title}>Cancelar</Text>
                                 </TouchableOpacity>
+                                
                             </View> :
                             <Text style={styles.title}>Eliminar</Text>
                     }

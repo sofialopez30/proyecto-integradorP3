@@ -1,9 +1,9 @@
 import React, { Component } from 'react'
 import {Text, View, TouchableOpacity, StyleSheet} from 'react-native'
-
 import { auth } from '../firebase/config'
 
 import FormProfile from '../components/FormProfile'
+import CambiarContrasena from '../components/CambiarContrasena'
 
 export default class Profile extends Component {
   constructor(props) {
@@ -28,6 +28,8 @@ export default class Profile extends Component {
         <Text style={styles.title}>Tu Perfil</Text>
         
         <FormProfile userEmail={auth.currentUser.email} navigation={this.props.navigation} />
+        
+        <CambiarContrasena navigation={this.props.navigation} />
         
         <TouchableOpacity style={styles.logoutButton} onPress={() => this.logOut()}>
           <Text style={styles.logoutButtonText}>Logout</Text>

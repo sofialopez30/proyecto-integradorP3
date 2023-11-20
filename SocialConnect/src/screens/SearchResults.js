@@ -7,86 +7,89 @@ export default class SearchResults extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      search: "",
-      cargando: null,
+      search: '',
       usuarios: [],
-    }
+      cargando: null,
+    };
   }
 
-  buscarUsuarios(search) {
-    this.setState({ cargando: true })
-    db.collection("users").where("userName", "==", search).get()
-      .then(docs => {
-        let arrayUsuarios = []
-        console.log('entre')
-        if (docs.length === 0) {
-          db.collection("users").where("owner", "==", search).get()
-            .then(docs => {
-              docs.forEach(doc => {
-                arrayUsuarios.push(doc.data())
-              })
-              this.setState({ usuarios: arrayUsuarios, cargando: false })
-            })
-            .catch(error => console.log(error))
-        } else {
-          console.log('entre2')
-          docs.forEach(doc => {
-            arrayUsuarios.push(doc.data())
-          })
-          this.setState({ usuarios: arrayUsuarios, cargando: false })
-        }
+  buscarUser(search) {
+    this.setState({ cargando: true });
+
+    db.collection('users')
+      .get()
+      .then((docs) => {
+        let arrayUsuarios = [];
+        docs.forEach((doc) => {
+          let usuario = doc.data();
+          let minusUserName = usuario.userName.toLowerCase();
+          if (minusUserName.includes(search.toLowerCase())) {
+            arrayUsuarios.push(usuario);
+          } else {
+            let minusEmail = usuario.owner.toLowerCase();
+            if (minusEmail.includes(search.toLowerCase())) {
+              arrayUsuarios.push(usuario);
+            }
+          }
+        });
+        this.setState({ usuarios: arrayUsuarios, cargando: false });
       })
-      .catch(error => console.log(error))
+      .catch((error) => console.log(error));
   }
-
 
   render() {
     return (
       <View style={styles.container}>
-        <Text style={styles.title}> Busqueda </Text>
         <TouchableOpacity
           style={styles.backButton}
-          onPress={() => this.props.navigation.goBack()}
-        >
+          onPress={() => this.props.navigation.goBack()}>
           <Text style={styles.tit}>&larr;</Text>
         </TouchableOpacity>
 
+        <Text style={styles.title}>Busqueda</Text>
 
         <View style={styles.searchSection}>
+
           <TextInput
             style={styles.input}
-            placeholder="Busca un user"
-            onChangeText={(search) => this.setState({ search })}
+            placeholder="Buscar un usuario"
+            onChangeText={(search) => {
+              this.buscarUser(search);
+              this.setState({ search });
+            }}
             value={this.state.search}
           />
+
           <TouchableOpacity
             style={styles.searchButton}
-            onPress={() => this.buscarUsuarios(this.state.search)}>
+            onPress={() => this.buscarUser(this.state.search)}>
             <Text style={styles.searchButtonText}>Buscar</Text>
           </TouchableOpacity>
+          
         </View>
 
-
-        {this.state.cargando === null ?
-          null :
-          this.state.cargando ?
-            <ActivityIndicator size="large" color="white" /> :
-            this.state.usuarios.length === 0 ?
-              <Text style={styles.userName}>El user no existe</Text> :
-              <FlatList
-                data={this.state.usuarios}
-                renderItem={({ item }) =>
-                  <View style={styles.userContainer}>
-                    <TouchableOpacity
-                      onPress={() => this.props.navigation.navigate("StackProfile", { userName: item.userName })}
-                    >
-                      <Text style={styles.userName}>{item.userName}</Text>
-                    </TouchableOpacity>
-                  </View>
-                }
-                keyExtractor={item => item.userName}
-              />
-        }
+        {this.state.cargando === null ? null : this.state.cargando ? (
+          <Text>Cargando...</Text>
+        ) : this.state.usuarios.length === 0 ? (
+          <Text style={styles.title}>No hay usuarios que coincidan con la búsqueda</Text>
+        ) : (
+          <FlatList
+             data={this.state.usuarios}
+            renderItem={({ item }) => (
+              <View style={styles.userContainer}>
+                <TouchableOpacity
+                  onPress={() =>
+                    this.props.navigation.navigate( "StackProfile" , {
+                       userName: item.userName ,
+                    })
+                  }>
+                  <Text style={styles.userName}>{item.userName}</Text>
+                </TouchableOpacity>
+              </View>
+            )}
+            keyExtractor={(item) => item.createdAt.toString()}
+          />
+        )}
       </View>
     );
   }
@@ -99,7 +102,7 @@ const styles = StyleSheet.create({
     padding: 20,
     backgroundColor: '#282c34',
   },
-  tit : {
+  tit: {
     color: '#61dafb',
     fontSize: 25,
     fontWeight: 'bold',
@@ -120,7 +123,6 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
     marginBottom: 20,
-    
   },
   input: {
     flex: 1,

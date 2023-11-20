@@ -30,20 +30,18 @@ class FormProfile extends Component {
       });
     });
   }
-
+  
   getPosteos(userEmail) {
     db.collection("posts").onSnapshot((querySnapshot) => {
-      let cantidadPosteos = 0
-      querySnapshot.forEach((doc) => {
-        if (doc.data().owner == userEmail) {
-          cantidadPosteos++
-        }
-      });
+      const cantidadPosteos = querySnapshot.docs
+        .filter((doc) => doc.data().owner === userEmail) // filro para que cumpla con la condicion
+        .length;
+
       this.setState({
         cantidadPosteos: cantidadPosteos
-      })
+      });
     });
-  }
+}
 
   render() {
     return (
@@ -58,6 +56,7 @@ class FormProfile extends Component {
                 source={{ uri: this.state.userData.fotoPerfil }}
 
               />
+              
               <Text style={styles.label} > Email: </Text>
               <Text style={styles.userData}>{this.props.userEmail}</Text>
               <Text style={styles.label}>Nombre de usuario:</Text>

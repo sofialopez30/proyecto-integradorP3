@@ -1,7 +1,7 @@
 import { Text, View, StyleSheet, TouchableOpacity, Image } from 'react-native'
 import React, { Component } from 'react'
 import { Camera } from 'expo-camera'
-import { storage } from '../firebase/config'
+import {storage, db, auth } from '../firebase/config'
 
 export default class FormPosteo extends Component {
     constructor(props){
@@ -16,20 +16,22 @@ export default class FormPosteo extends Component {
 
     componentDidMount(){
         Camera.requestCameraPermissionsAsync()
-        .then((resp)=> this.setState({permisos: true}))
+        .then((resp)=> this.setState({
+          permisos: true
+        }))
         .catch((err) => console.log(err))
     }
 
     tomarFoto(){
         this.metodosDeCamara.takePictureAsync()
-        .then(imgTemp => this.setState({
-            urlTemp: imgTemp.uri,
+        .then(foto => this.setState({
+            urlTemp: foto.uri,
             mostrarCamara: false
         }))
         .catch(err => console.log(err))
     }
 
-    aceptarFoto() {
+    guardarFoto() {
         fetch(this.state.urlTemp)
             .then(resp => resp.blob())
             .then(img => {
@@ -66,6 +68,7 @@ export default class FormPosteo extends Component {
           <View style={styles.container}>
             {this.state.permisos && this.state.mostrarCamara ? (
               <>
+
                 <Camera
                   style={styles.camara}
                   type={Camera.Constants.Type.back}
@@ -74,17 +77,23 @@ export default class FormPosteo extends Component {
                 <TouchableOpacity onPress={() => this.tomarFoto()} style={styles.button}>
                   <Text style={styles.buttonText}>Tomar foto</Text>
                 </TouchableOpacity>
+
               </>
+
+
             ) : this.state.permisos && this.state.mostrarCamara === false ? (
+
               <>
                 <Image
                   source={{ uri: this.state.urlTemp }}
                   style={styles.img}
                   resizeMode={'contain'}
                 />
-                <TouchableOpacity onPress={() => this.aceptarFoto()} style={styles.button}>
+
+                <TouchableOpacity onPress={() => this.guardarFoto()} style={styles.button}>
                   <Text style={styles.buttonText}>Aceptar Foto</Text>
                 </TouchableOpacity>
+
                 <TouchableOpacity onPress={() => this.rechazarFoto()} style={styles.button}>
                   <Text style={styles.buttonText}>Rechazar Foto</Text>
                 </TouchableOpacity>
@@ -105,12 +114,13 @@ export default class FormPosteo extends Component {
         backgroundColor: '#282c34',
       },
       camara: {
-        width: '100%',
-        height: 300,
+        width: 350,
+        height: 150,
         
       },
       img: {
         height: 300,
+        width: 300,
       },
       button: {
         backgroundColor: '#61dafb',

@@ -1,6 +1,6 @@
 import { Text, View, StyleSheet, TextInput, TouchableOpacity } from 'react-native'
 import React, { Component } from 'react'
-import { TextInputComponent } from 'react-native'
+
 
 export default class FormPosteoDescripcion extends Component {
     constructor(props){
@@ -14,6 +14,7 @@ export default class FormPosteoDescripcion extends Component {
         <View style={styles.container}>
           <Text style={styles.label}>Describe tu post</Text>
           <View style={styles.inputContainer}>
+
             <TextInput
               placeholder='Añade aquí la descripción de tu post'
               onChangeText={(descripcion) => this.props.actualizarDescripcion(descripcion)}
@@ -21,6 +22,7 @@ export default class FormPosteoDescripcion extends Component {
               multiline={true}
               numberOfLines={8}
               style={styles.input}
+              
             />
           </View>
         </View>
@@ -37,6 +39,7 @@ export default class FormPosteoDescripcion extends Component {
       fontSize: 16,
       fontWeight: 'bold',
       marginBottom: 5,
+      color: 'white'
     },
     inputContainer: {
       borderColor: '#ccc',
@@ -47,5 +50,6 @@ export default class FormPosteoDescripcion extends Component {
     input: {
       fontSize: 16,
       textAlignVertical: 'top',
+      color: 'white'
     },
   });

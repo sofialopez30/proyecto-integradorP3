@@ -37,7 +37,7 @@ export default class Posteo extends Component {
 
   getLikes(postId) {
     db.collection("posts").doc(postId).get().then((doc) => {
-      const likes = doc.exists ? doc.data().arrayLikes || [] : [];
+      const likes = doc.exists ? doc.data().arrayLikes || [] : [];  // verifica si existe, obtiene el valor de likes y si no hay likes, hago un nuevo array vacio
       this.setState({
         arrayLikes: likes,
         liked: likes.includes(auth.currentUser.email),
@@ -78,6 +78,7 @@ export default class Posteo extends Component {
     const image = this.props.image;
     return (
       <View style={styles.postContainer}>
+
         <TouchableOpacity
           style={styles.usernameContainer}
           onPress={() =>
@@ -96,7 +97,9 @@ export default class Posteo extends Component {
         />
     
         <View style={styles.actionContainer}>
+
           {this.state.liked ? (
+
             <TouchableOpacity
               style={styles.likeContainer}
               onPress={() => this.setUnlike(this.props.posteo.id)}
@@ -104,7 +107,9 @@ export default class Posteo extends Component {
               <AntDesign name="heart" size={24} color="red" />
               <Text style={styles.likeCountText}> {this.state.arrayLikes.length}</Text>
             </TouchableOpacity>
+
           ) : (
+
             <TouchableOpacity
               style={styles.likeContainer}
               onPress={() => this.setLike(this.props.posteo.id)}
@@ -112,6 +117,7 @@ export default class Posteo extends Component {
               <AntDesign name="hearto" size={24} color="black" />
               <Text style={styles.likeCountText}> {this.state.arrayLikes.length}</Text>
             </TouchableOpacity>
+            
           )}
         </View>
     

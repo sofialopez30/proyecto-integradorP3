@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Text, View, StyleSheet, TouchableOpacity } from 'react-native'
+import { Text, View, StyleSheet, TouchableOpacity, TextInput } from 'react-native'
 import { auth, db } from '../firebase/config'
 import FormPosteo from '../components/FormPosteo'
 import FormPosteoDescripcion from '../components/FormPosteoDescripcion'
@@ -13,6 +13,16 @@ export default class Posteo extends Component {
       paso1: true
     }
   }
+
+  cargarDesdeURL = () => {
+    const urlFoto = this.state.urlFoto || ''; 
+    this.setState({ 
+      urlFoto,
+      paso1: false
+     });
+
+  };
+
   onSubmit({
     descripcion,
     fotoUrl
@@ -47,18 +57,38 @@ export default class Posteo extends Component {
     })
   }
 
+ 
+
   render() {
     return (
       <View style={styles.container}>
         <Text style={styles.title}>Nuevo Post</Text>
         {this.state.paso1 ? (
-          <FormPosteo style={styles.img} actualizarFotourl={(url) => this.actualizarFotourl(url)} />
+
+          <>
+          <Text style= {styles.title}> Saca tu foto o subela desde la URL! </Text>
+
+            <FormPosteo style={styles.img} actualizarFotourl={(url) => this.actualizarFotourl(url)} />
+            
+            <Text style= {styles.title}> Sube aqui tu foto! </Text>
+
+            <TextInput
+              style={styles.input}
+              placeholder="https://www.ejemplo.com"
+              keyboardType="default"
+              onChangeText={(text) => this.actualizarFotourl(text)}
+              value={this.state.urlFoto}
+            />
+          
+          </>
+
         ) : (
           <>
             <FormPosteoDescripcion
               actualizarDescripcion={(descripcion) => this.actualizarDescripcion(descripcion)}
               estadoDescripcion={this.state.descripcion}
             />
+
             <TouchableOpacity
               style={styles.sendButton}
               onPress={() =>
@@ -90,6 +120,17 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     marginBottom: 20,
     color: '#61dafb',
+  },
+  input: {
+
+    height: 100,
+    width: 280,
+    borderColor: 'gray',
+    borderWidth: 1,
+    marginRight: 10,
+    paddingLeft: 10,
+    color: '#ffffff',
+    borderRadius: 10,
   },
   img:{
     height: 300,
