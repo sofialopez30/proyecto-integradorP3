@@ -33,10 +33,7 @@ class FormProfile extends Component {
   
   getPosteos(userEmail) {
     db.collection("posts").onSnapshot((querySnapshot) => {
-      const cantidadPosteos = querySnapshot.docs
-        .filter((doc) => doc.data().owner === userEmail) // filro para que cumpla con la condicion
-        .length;
-
+      const cantidadPosteos = querySnapshot.docs.filter((doc) => doc.data().owner === userEmail).length; // filro para que cumpla con la condicion
       this.setState({
         cantidadPosteos: cantidadPosteos
       });

@@ -23,11 +23,7 @@ export default class Posteo extends Component {
 
   };
 
-  onSubmit({
-    descripcion,
-    fotoUrl
-  }) {
-    
+  onSubmit({ descripcion, fotoUrl }) { 
     db.collection('posts').add(
       {
         owner: auth.currentUser.email,
@@ -74,11 +70,11 @@ export default class Posteo extends Component {
 
             <TextInput
               style={styles.input}
-              placeholder="https://www.ejemplo.com"
               keyboardType="default"
               onChangeText={(text) => this.actualizarFotourl(text)}
               value={this.state.urlFoto}
-            />
+              placeholder="https://www.ejemplo.com"
+              />
           
           </>
 

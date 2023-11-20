@@ -1,7 +1,7 @@
 import { Text, View, StyleSheet, TouchableOpacity, Image } from 'react-native'
 import React, { Component } from 'react'
 import { Camera } from 'expo-camera'
-import {storage, db, auth } from '../firebase/config'
+import { auth, db, storage } from '../firebase/config'
 
 export default class FormPosteo extends Component {
     constructor(props){
@@ -46,7 +46,7 @@ export default class FormPosteo extends Component {
                                 // Actualiza la cantidad de posteos del usuario
                                 const userRef = db.collection("users").doc(auth.currentUser.uid);
                                 userRef.update({
-                                    arrayPosteos: firebase.firestore.FieldValue.increment(1),
+                                    arrayPosteos: firebase.firestore.FieldValue.increment(1), //le sumo 1 
                                 });
                             })
                             .catch((err) => console.log(err));

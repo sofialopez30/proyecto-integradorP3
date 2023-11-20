@@ -69,10 +69,13 @@ export default class SearchResults extends Component {
         </View>
 
         {this.state.cargando === null ? null : this.state.cargando ? (
+
           <Text>Cargando...</Text>
+
         ) : this.state.usuarios.length === 0 ? (
           <Text style={styles.title}>No hay usuarios que coincidan con la búsqueda</Text>
         ) : (
+          
           <FlatList
              data={this.state.usuarios}
             renderItem={({ item }) => (
